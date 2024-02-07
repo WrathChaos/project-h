@@ -20,6 +20,8 @@ const permissions: HealthKitPermissions = {
 
 const useHealthKit = (date: string = new Date().toISOString()) => {
   const [steps, setSteps] = useState(0);
+  const [flightsClimbed, setFlightsClimbed] = useState(0);
+  const [distanceWalkingRunning, setDistanceWalkingRunning] = useState(0);
   const [hasPermissions, setHasPermission] = useState(false);
 
   useEffect(() => {
@@ -51,6 +53,34 @@ const useHealthKit = (date: string = new Date().toISOString()) => {
     });
   }, [date]);
 
+  const queryFlightsClimbedData = useCallback(() => {
+    const options: HealthInputOptions = {
+      date,
+    };
+
+    AppleHealthKit.getFlightsClimbed(options, (err, results) => {
+      if (err) {
+        console.log("Error getting the flights climbed");
+        return;
+      }
+      setFlightsClimbed(results.value);
+    });
+  }, [date]);
+
+  const queryDistanceWalkingRunningData = useCallback(() => {
+    const options: HealthInputOptions = {
+      date,
+    };
+
+    AppleHealthKit.getDistanceWalkingRunning(options, (err, results) => {
+      if (err) {
+        console.log("Error getting the distance walking running");
+        return;
+      }
+      setDistanceWalkingRunning(results.value);
+    });
+  }, [date]);
+
   useEffect(() => {
     if (!hasPermissions) {
       return;
@@ -58,8 +88,15 @@ const useHealthKit = (date: string = new Date().toISOString()) => {
 
     // Query Health data
     queryStepData();
-  }, [hasPermissions, queryStepData]);
+    queryFlightsClimbedData();
+    queryDistanceWalkingRunningData();
+  }, [
+    hasPermissions,
+    queryStepData,
+    queryFlightsClimbedData,
+    queryDistanceWalkingRunningData,
+  ]);
 
-  return { steps, hasPermissions };
+  return { steps, flightsClimbed, distanceWalkingRunning, hasPermissions };
 };
 export default useHealthKit;

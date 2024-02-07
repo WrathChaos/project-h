@@ -1,6 +1,5 @@
 import React from "react";
-import { useColorScheme } from "react-native";
-import Icon, { IconType } from "react-native-dynamic-vector-icons";
+import { Image, useColorScheme } from "react-native";
 import { isReadyRef, navigationRef } from "react-navigation-helpers";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,6 +12,8 @@ import HomeScreen from "@screens/home/HomeScreen";
  */
 import { SCREENS } from "@shared-constants";
 import { DarkTheme, LightTheme, palette } from "@theme/themes";
+import { vmin } from "@freakycoder/react-native-helpers";
+import SharingScreen from "@screens/sharing/SharingScreen";
 
 // ? If you want to use stack or tab or both
 const Tab = createBottomTabNavigator();
@@ -26,36 +27,20 @@ const Navigation = () => {
     return () => (isReadyRef.current = false);
   }, []);
 
-  const renderTabIcon = (
-    route: any,
-    focused: boolean,
-    color: string,
-    size: number,
-  ) => {
-    let iconName = "home";
-    switch (route.name) {
-      case SCREENS.HOME:
-        iconName = focused ? "home" : "home-outline";
-        break;
-      case SCREENS.SEARCH:
-        iconName = focused ? "search" : "search-outline";
-        break;
-      case SCREENS.NOTIFICATION:
-        iconName = focused ? "notifications" : "notifications-outline";
-        break;
-      case SCREENS.PROFILE:
-        iconName = focused ? "person" : "person-outline";
-        break;
-      default:
-        iconName = focused ? "home" : "home-outline";
-        break;
+  const renderTabIcon = (route: any, color: string) => {
+    const { name } = route;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    let iconSource = require("@assets/icons/running.png");
+    if (name === SCREENS.SUMMARY) {
+      iconSource = require("@assets/icons/running.png");
+    } else if (name === SCREENS.SHARING) {
+      iconSource = require("@assets/icons/sharing.png");
     }
     return (
-      <Icon
-        name={iconName}
-        type={IconType.Ionicons}
-        size={size}
-        color={color}
+      <Image
+        source={iconSource}
+        style={{ width: vmin * 8, height: vmin * 8 }}
+        tintColor={color}
       />
     );
   };
@@ -65,8 +50,7 @@ const Navigation = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarIcon: ({ focused, color, size }) =>
-            renderTabIcon(route, focused, color, size),
+          tabBarIcon: ({ color }) => renderTabIcon(route, color),
           tabBarActiveTintColor: palette.primary,
           tabBarInactiveTintColor: "gray",
           tabBarStyle: {
@@ -74,7 +58,8 @@ const Navigation = () => {
           },
         })}
       >
-        <Tab.Screen name={SCREENS.HOME} component={HomeScreen} />
+        <Tab.Screen name={SCREENS.SUMMARY} component={HomeScreen} />
+        <Tab.Screen name={SCREENS.SHARING} component={SharingScreen} />
       </Tab.Navigator>
     );
   };
@@ -88,7 +73,7 @@ const Navigation = () => {
       theme={isDarkMode ? DarkTheme : LightTheme}
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name={SCREENS.HOME} component={renderTabNavigation} />
+        <Stack.Screen name={SCREENS.SUMMARY} component={renderTabNavigation} />
       </Stack.Navigator>
     </NavigationContainer>
   );
