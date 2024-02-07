@@ -8,6 +8,10 @@ export default (theme: Theme) => {
     container: {
       marginTop: vmin * 5,
       backgroundColor: colors.background,
+      flexDirection: "row",
+    },
+    iconContainer: {
+      paddingRight: vmin * 3,
     },
     valueTextStyle: {
       fontSize: vmin * 10,

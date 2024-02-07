@@ -30,18 +30,22 @@ const HealthItem: React.FC<HealthItemProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      <Icon
-        type={iconType}
-        name={iconName}
-        color={colors.highlight}
-        size={vmin * 7}
-      />
-      <Text bold h2>
-        {title}
-      </Text>
-      <Text bold color={colors.white} style={styles.valueTextStyle}>
-        {value}
-      </Text>
+      <View style={styles.iconContainer}>
+        <Icon
+          type={iconType}
+          name={iconName}
+          color={colors.highlight}
+          size={vmin * 7}
+        />
+      </View>
+      <View>
+        <Text bold h2>
+          {title}
+        </Text>
+        <Text bold color={colors.white} style={styles.valueTextStyle}>
+          {value}
+        </Text>
+      </View>
     </View>
   );
 };

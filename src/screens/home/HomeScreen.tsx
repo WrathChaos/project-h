@@ -36,16 +36,16 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
           iconType={IconType.Ionicons}
         />
         <HealthItem
+          title="Distance Walking/Running"
+          value={distanceWalkingRunning.toFixed(1) + " m"}
+          iconName="running"
+          iconType={IconType.FontAwesome5}
+        />
+        <HealthItem
           title="Flights Climbed"
           value={flightsClimbed}
           iconName="stairs"
           iconType={IconType.MaterialCommunityIcons}
-        />
-        <HealthItem
-          title="Distance Walking/Running"
-          value={distanceWalkingRunning}
-          iconName="running"
-          iconType={IconType.FontAwesome5}
         />
       </View>
     </SafeAreaView>
