@@ -5,12 +5,8 @@ import { isReadyRef, navigationRef } from "react-navigation-helpers";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import DetailScreen from "@screens/detail/DetailScreen";
 // ? Screens
 import HomeScreen from "@screens/home/HomeScreen";
-import NotificationScreen from "@screens/notification/NotificationScreen";
-import ProfileScreen from "@screens/profile/ProfileScreen";
-import SearchScreen from "@screens/search/SearchScreen";
 
 /**
  * ? Local & Shared Imports
@@ -79,12 +75,6 @@ const Navigation = () => {
         })}
       >
         <Tab.Screen name={SCREENS.HOME} component={HomeScreen} />
-        <Tab.Screen name={SCREENS.SEARCH} component={SearchScreen} />
-        <Tab.Screen
-          name={SCREENS.NOTIFICATION}
-          component={NotificationScreen}
-        />
-        <Tab.Screen name={SCREENS.PROFILE} component={ProfileScreen} />
       </Tab.Navigator>
     );
   };
@@ -99,9 +89,6 @@ const Navigation = () => {
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name={SCREENS.HOME} component={renderTabNavigation} />
-        <Stack.Screen name={SCREENS.DETAIL}>
-          {(props) => <DetailScreen {...props} />}
-        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
