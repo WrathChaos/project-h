@@ -7,6 +7,7 @@ import useHealthKit from "@services/hooks/useHealthKit";
 import Text from "@shared-components/text-wrapper/TextWrapper";
 import HealthItem from "@screens/home/components/health-item/HealthItem";
 import { IconType } from "react-native-dynamic-vector-icons";
+import { formatNumber } from "@utils";
 
 interface HomeScreenProps {}
 
@@ -15,7 +16,8 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
   const { colors } = theme;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const { steps, flightsClimbed, distanceWalkingRunning } = useHealthKit();
+  const { points, steps, flightsClimbed, distanceWalkingRunning } =
+    useHealthKit();
 
   /* -------------------------------------------------------------------------- */
   /*                               Render Methods                               */
@@ -29,6 +31,12 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
         </Text>
       </View>
       <View style={styles.content}>
+        <HealthItem
+          title="Points"
+          value={`${formatNumber(points)} pts`}
+          iconName="star-three-points"
+          iconType={IconType.MaterialCommunityIcons}
+        />
         <HealthItem
           title="Steps"
           value={steps}

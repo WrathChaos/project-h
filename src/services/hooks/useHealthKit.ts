@@ -18,7 +18,15 @@ const permissions: HealthKitPermissions = {
   },
 };
 
+// TODO: Move coefficients remote config to make it dynamic
+enum FitnessCoefficients {
+  steps = 10,
+  flightsClimbed = 25,
+  distanceWalkingRunning = 5,
+}
+
 const useHealthKit = (date: string = new Date().toISOString()) => {
+  const [points, setPoints] = useState(0);
   const [steps, setSteps] = useState(0);
   const [flightsClimbed, setFlightsClimbed] = useState(0);
   const [distanceWalkingRunning, setDistanceWalkingRunning] = useState(0);
@@ -81,6 +89,15 @@ const useHealthKit = (date: string = new Date().toISOString()) => {
     });
   }, [date]);
 
+  const calculatePoints = useCallback(() => {
+    return (
+      steps * FitnessCoefficients.steps +
+      flightsClimbed * FitnessCoefficients.flightsClimbed +
+      Math.floor(distanceWalkingRunning) *
+        FitnessCoefficients.distanceWalkingRunning
+    );
+  }, [steps, flightsClimbed, distanceWalkingRunning]);
+
   useEffect(() => {
     if (!hasPermissions) {
       return;
@@ -90,13 +107,23 @@ const useHealthKit = (date: string = new Date().toISOString()) => {
     queryStepData();
     queryFlightsClimbedData();
     queryDistanceWalkingRunningData();
+
+    // Calculate points and set points
+    setPoints(calculatePoints());
   }, [
     hasPermissions,
     queryStepData,
     queryFlightsClimbedData,
     queryDistanceWalkingRunningData,
+    calculatePoints,
   ]);
 
-  return { steps, flightsClimbed, distanceWalkingRunning, hasPermissions };
+  return {
+    points,
+    steps,
+    flightsClimbed,
+    distanceWalkingRunning,
+    hasPermissions,
+  };
 };
 export default useHealthKit;
